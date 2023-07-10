@@ -1,40 +1,30 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CanIBringMyDog
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
-            _configuration = configuration;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add services required for web API controllers
+            services.AddDbContext<DataContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+
             services.AddControllers();
 
-            // Configure database context
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-
-            // Register your services and repositories here
-            services.AddScoped<DogFriendlyPlaceRepository>();
-            services.AddScoped<DogFriendlyPlaceService>();
-
-            // Add the following line to enable CORS (if needed)
             services.AddCors();
+
+            //  services.AddScoped<IDogFriendlyPlaceService, DogFriendlyPlaceService>();
+            //  services.AddScoped<IDogFriendlyPlaceRepository, DogFriendlyPlaceRepository>();
 
             // Add any other additional services you require
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -44,15 +34,12 @@ namespace CanIBringMyDog
             }
             else
             {
-                // Add production error handling here if needed
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 
-            // Enable routing
             app.UseRouting();
 
-            // Add the following lines to enable CORS (if needed)
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin();
@@ -60,12 +47,10 @@ namespace CanIBringMyDog
                 builder.AllowAnyHeader();
             });
 
-            // Configure endpoints
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
-
     }
 }

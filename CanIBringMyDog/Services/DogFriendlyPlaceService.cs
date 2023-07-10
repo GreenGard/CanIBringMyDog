@@ -1,36 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using CanIBringMyDog.Interfaces.Services;
+using CanIBringMyDog.Models;
+using CanIBringMyDog.Repositories;
+using System.Collections.Generic;
 
-public class DogFriendlyPlaceService
+namespace CanIBringMyDog.Services
 {
-    private readonly DogFriendlyPlaceRepository _repository;
-
-    public DogFriendlyPlaceService(DogFriendlyPlaceRepository repository)
+    public class DogFriendlyPlaceService : IDogFriendlyPlaceService //: =arv
     {
-        _repository = repository;
-    }
+        private readonly DogFriendlyPlaceRepository _repository;
 
-    public IEnumerable<DogFriendlyPlace> GetAllDogFriendlyPlaces()
-    {
-        return _repository.GetAll();
-    }
+        public DogFriendlyPlaceService(DogFriendlyPlaceRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public DogFriendlyPlace GetDogFriendlyPlaceById(int id)
-    {
-        return _repository.GetById(id);
-    }
+        public IEnumerable<DogFriendlyPlace> GetAllDogFriendlyPlaces()
+        {
+            return _repository.GetAll();
+        }
 
-    public void AddDogFriendlyPlace(DogFriendlyPlace place)
-    {
-        _repository.Add(place);
-    }
+        public DogFriendlyPlace GetDogFriendlyPlaceById(int id)
+        {
+            return _repository.GetById(id);
+        }
 
-    public void UpdateDogFriendlyPlace(DogFriendlyPlace place)
-    {
-        _repository.Update(place);
-    }
+        public void AddDogFriendlyPlace(DogFriendlyPlace place)
+        {
+            _repository.Add(place);
+        }
 
-    public void DeleteDogFriendlyPlace(int id)
-    {
-        _repository.Delete(id);
+        public void UpdateDogFriendlyPlace(DogFriendlyPlace place)
+        {
+            _repository.Update(place);
+        }
+
+        public void DeleteDogFriendlyPlace(int id)
+        {
+            _repository.Delete(id);
+        }
     }
 }

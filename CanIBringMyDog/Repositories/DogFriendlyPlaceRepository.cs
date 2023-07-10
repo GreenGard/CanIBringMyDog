@@ -1,46 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using CanIBringMyDog.Interfaces.Repositories;
+using CanIBringMyDog.Models;
+using System.Collections.Generic;
 using System.Linq;
 
-public class DogFriendlyPlaceRepository
+namespace CanIBringMyDog.Repositories
 {
-    //medlem readonly=const i detta fallet privat _litenbokstav
-    private readonly AppDbContext _context;
-
-    //Construktor
-    public DogFriendlyPlaceRepository(AppDbContext context)
+    public class DogFriendlyPlaceRepository : IDogFriendlyPlaceRepository
     {
-        _context = context;
-    }
+        //medlem readonly=const i detta fallet privat _litenbokstav
+        private readonly DataContext _context;
 
-    public IEnumerable<DogFriendlyPlace> GetAll()
-    {
-        return _context.DogFriendlyPlaces.ToList();
-    }
-
-    public DogFriendlyPlace GetById(int id)
-    {
-        return _context.DogFriendlyPlaces.FirstOrDefault(p => p.Id == id);
-    }
-
-    public void Add(DogFriendlyPlace place)
-    {
-        _context.DogFriendlyPlaces.Add(place);
-        _context.SaveChanges();
-    }
-
-    public void Update(DogFriendlyPlace place)
-    {
-        _context.DogFriendlyPlaces.Update(place);
-        _context.SaveChanges();
-    }
-
-    public void Delete(int id)
-    {
-        var place = _context.DogFriendlyPlaces.FirstOrDefault(p => p.Id == id);
-        if (place != null)
+        //Construktor
+        public DogFriendlyPlaceRepository(DataContext context)
         {
-            _context.DogFriendlyPlaces.Remove(place);
+            _context = context;
+        }
+
+        public IEnumerable<DogFriendlyPlace> GetAll()
+        {
+            return _context.DogFriendlyPlaces.ToList();
+        }
+
+        public DogFriendlyPlace GetById(int id)
+        {
+            return _context.DogFriendlyPlaces.FirstOrDefault(p => p.Id == id);
+        }
+
+        public void Add(DogFriendlyPlace place)
+        {
+            _context.DogFriendlyPlaces.Add(place);
             _context.SaveChanges();
+        }
+
+        public void Update(DogFriendlyPlace place)
+        {
+            _context.DogFriendlyPlaces.Update(place);
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var place = _context.DogFriendlyPlaces.FirstOrDefault(p => p.Id == id);
+            if (place != null)
+            {
+                _context.DogFriendlyPlaces.Remove(place);
+                _context.SaveChanges();
+            }
         }
     }
 }
